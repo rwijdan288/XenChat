@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <title>XenChat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/ui.css">
+  <script src="/js/theme.js"></script>
+</head>
+<body>
+
+  <!-- Halaman penuh (profil, pengaturan, owner, gabung grup) -->
+  <section class="pg" id="page" hidden aria-label="Halaman">
+    <header class="pg__head">
+      <button class="icon-btn" id="page-back" type="button" aria-label="Kembali" title="Kembali"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <h1 class="pg__title truncate" id="page-title"></h1>
+      <span id="page-actions"></span>
+    </header>
+    <div class="pg__body" id="page-body"></div>
+  </section>
+
+  <!-- Sprite ikon SVG inline -->
+  <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+    <symbol id="i-story" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3.2 2.6"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-channel" viewBox="0 0 24 24"><path d="M4 10v4h3l7 4V6L7 10H4z"/><path d="M17.5 9.5a4 4 0 0 1 0 5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18.5" r="1.4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-group" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.6a3 3 0 0 1 0 5.8M17.5 14.2A5 5 0 0 1 20.5 19"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6.5" width="12" height="11" rx="2.5"/><path d="M15 10.5l5.5-3v9l-5.5-3z"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></symbol>
+    <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 5h11l-2 4 2 4H5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M4 8l4 4 4-6 4 6 4-4-2 10H6z"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></symbol>
+    <symbol id="i-in" viewBox="0 0 24 24"><path d="M17 7L7 17M7 9v8h8"/></symbol>
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></symbol>
+    <symbol id="i-missed" viewBox="0 0 24 24"><path d="M17 7L7 17M7 9v8h8"/><path d="M15.5 4.5l4 4M19.5 4.5l-4 4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 11L12 15.5 16.5 11M5 19.5h14"/></symbol>
+    <symbol id="i-verified" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/><path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.2"/></symbol>
+  </svg>
+
+  <!-- Splash saat memeriksa sesi -->
+  <div class="splash" id="splash">
+    <span class="logo" aria-hidden="true">X</span>
+    <p id="splash-text">Memuat…</p>
+    <button class="btn btn--ghost" id="retry-btn" type="button" hidden>Coba lagi</button>
+  </div>
+
+  <div class="app" id="app" hidden>
+    <div class="app__body">
+      <header class="topbar">
+        <span class="logo logo--sm topbar__logo" aria-hidden="true">X</span>
+        <h1 class="topbar__title truncate" id="topbar-title">Chat</h1>
+        <span class="conn" data-conn role="status" hidden></span>
+        <button class="icon-btn topbar__more" id="more-btn" type="button" aria-label="Pengaturan" title="Pengaturan">
+          <svg class="icon" aria-hidden="true"><use href="#i-more"/></svg>
+        </button>
+      </header>
+
+      <main class="views">
+        <section class="view" data-view="chat" aria-label="Chat">
+          <div class="split">
+            <div class="split__list">
+              <div class="searchbar">
+                <label class="sr-only" for="user-search">Cari pengguna</label>
+                <div class="searchbar__field">
+                  <svg class="icon searchbar__icon" aria-hidden="true"><use href="#i-search"/></svg>
+                  <input class="field__input searchbar__input" id="user-search" type="search" placeholder="Cari nama, @username, atau ID" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30">
+                  <button class="searchbar__clear" id="user-search-clear" type="button" aria-label="Hapus pencarian" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+                </div>
+                <button class="icon-btn" id="group-new" type="button" aria-label="Grup baru" title="Grup baru"><svg class="icon" aria-hidden="true"><use href="#i-group"/></svg></button>
+              </div>
+              <div id="search-results" hidden></div>
+              <div id="chat-list-wrap">
+                <div id="chat-loading" aria-hidden="true"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+                <ul class="list" id="chat-list"></ul>
+                <div class="empty" id="chat-empty" hidden>
+                  <span class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg></span>
+                  <h2 class="empty__title">Belum ada percakapan</h2>
+                  <p class="empty__text">Cari seseorang di XenChat lalu mulai ngobrol.</p>
+                  <button class="btn" id="chat-new" type="button">Chat baru</button>
+                </div>
+                <div class="empty" id="chat-error" hidden>
+                  <h2 class="empty__title">Gagal memuat percakapan</h2>
+                  <button class="btn btn--ghost" id="list-retry" type="button">Coba lagi</button>
+                </div>
+                <button class="btn btn--ghost list-more" id="list-more" type="button" hidden>Muat lebih banyak</button>
+              </div>
+            </div>
+
+            <section class="split__pane" id="conv-pane" aria-label="Percakapan">
+              <div class="empty" id="conv-empty">
+                <span class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg></span>
+                <h2 class="empty__title">Pilih percakapan</h2>
+                <p class="empty__text">Isi percakapan akan tampil di panel ini.</p>
+              </div>
+              <div class="conv" id="conv-main" hidden>
+                <header class="conv__head">
+                  <button class="icon-btn" id="conv-back" type="button" aria-label="Kembali" title="Kembali"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+                  <button class="conv__who" id="conv-who" type="button" aria-label="Lihat profil">
+                    <span class="avatar-wrap" id="conv-avatar"></span>
+                    <span class="conv__text"><span class="conv__title" id="conv-title"></span><span class="conv__status" id="conv-status"></span></span>
+                  </button>
+                  <button class="icon-btn" id="conv-audio" type="button" aria-label="Panggilan suara" title="Panggilan suara" hidden><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></button>
+                  <button class="icon-btn" id="conv-video" type="button" aria-label="Panggilan video" title="Panggilan video" hidden><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg></button>
+                  <button class="icon-btn" id="conv-more" type="button" aria-label="Menu chat" title="Menu chat"><svg class="icon" aria-hidden="true"><use href="#i-more"/></svg></button>
+                  <span class="conn" data-conn role="status" hidden></span>
+                </header>
+                <div class="conv__msgs" id="msgs" role="log" aria-label="Pesan">
+                  <button class="hint" id="msgs-hint" type="button" hidden></button>
+                </div>
+                <div class="typing" id="typing" aria-live="polite"></div>
+                <div class="bar" id="bar" hidden>
+                  <div class="bar__body"><strong id="bar-title"></strong><span class="truncate" id="bar-text"></span></div>
+                  <button class="icon-btn" id="bar-close" type="button" aria-label="Batalkan" title="Batalkan"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+                </div>
+                <form class="composer" id="composer" novalidate>
+                  <div class="rec" id="rec" hidden><span class="rec__dot" aria-hidden="true"></span><span id="rec-time">0:00</span><span class="rec__hint">Geser ke kiri untuk batal</span></div>
+                  <button class="icon-btn composer__side" id="attach-btn" type="button" aria-label="Lampirkan file" title="Lampirkan"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+                  <label class="sr-only" for="composer-input">Tulis pesan</label>
+                  <textarea class="composer__input" id="composer-input" rows="1" maxlength="4000" placeholder="Tulis pesan…" autocomplete="off"></textarea>
+                  <button class="send-btn mic-btn" id="mic-btn" type="button" aria-label="Tahan untuk merekam pesan suara" title="Tahan untuk merekam"><svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg></button>
+                  <button class="send-btn" id="send-btn" type="submit" aria-label="Kirim" title="Kirim" hidden><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+                </form>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="story" aria-label="Story" hidden>
+          <div class="page">
+            <div class="row">
+              <button class="item" id="story-mine-open" type="button">
+                <span class="avatar-wrap" id="story-mine-avatar"></span>
+                <span class="item__main"><span class="item__name">Cerita Anda</span><span class="item__preview truncate" id="story-mine-sub">Ketuk + untuk menambah story</span></span>
+              </button>
+              <button class="icon-btn icon-btn--fill" id="story-add" type="button" aria-label="Tambah story" title="Tambah story"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+              <input type="file" id="story-file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm" hidden>
+            </div>
+            <div id="story-loading" aria-hidden="true"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+            <h2 class="section-title" id="story-recent-title" hidden>Terbaru</h2>
+            <ul class="list" id="story-recent"></ul>
+            <h2 class="section-title" id="story-viewed-title" hidden>Sudah dilihat</h2>
+            <ul class="list" id="story-viewed"></ul>
+            <div class="empty" id="story-empty" hidden>
+              <span class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-story"/></svg></span>
+              <h2 class="empty__title">Belum ada story</h2>
+              <p class="empty__text">Story dari kontakmu akan muncul di sini selama 24 jam.</p>
+              <button class="btn" id="story-empty-add" type="button">Buat story</button>
+            </div>
+            <div class="empty" id="story-error" hidden>
+              <h2 class="empty__title">Gagal memuat story</h2>
+              <button class="btn btn--ghost" id="story-retry" type="button">Coba lagi</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view="saluran" aria-label="Saluran" hidden>
+          <div class="split">
+            <div class="split__list">
+              <div class="searchbar">
+                <div class="searchbar__field">
+                  <svg class="icon searchbar__icon" aria-hidden="true"><use href="#i-search"/></svg>
+                  <label class="sr-only" for="chan-search">Cari saluran</label>
+                  <input class="field__input searchbar__input" id="chan-search" type="search" placeholder="Cari saluran" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30">
+                  <button class="searchbar__clear" id="chan-search-clear" type="button" aria-label="Hapus pencarian" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+                </div>
+                <button class="icon-btn" id="chan-new" type="button" aria-label="Buat saluran" title="Buat saluran"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+              </div>
+              <div class="segmented segmented--2 tabs" id="chan-tabs" role="tablist" aria-label="Daftar saluran">
+                <button type="button" role="tab" data-scope="following" aria-selected="true">Mengikuti</button>
+                <button type="button" role="tab" data-scope="discover" aria-selected="false">Jelajahi</button>
+              </div>
+              <div id="chan-loading" aria-hidden="true"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+              <ul class="list" id="chan-list"></ul>
+              <div class="empty" id="chan-empty" hidden>
+                <span class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-channel"/></svg></span>
+                <h2 class="empty__title" id="chan-empty-title">Belum ada saluran</h2>
+                <p class="empty__text" id="chan-empty-text">Saluran yang kamu ikuti akan muncul di sini.</p>
+                <button class="btn" id="chan-empty-go" type="button">Jelajahi saluran</button>
+              </div>
+              <div class="empty" id="chan-error" hidden>
+                <h2 class="empty__title">Gagal memuat saluran</h2>
+                <button class="btn btn--ghost" id="chan-retry" type="button">Coba lagi</button>
+              </div>
+              <button class="btn btn--ghost list-more" id="chan-more" type="button" hidden>Muat lebih banyak</button>
+            </div>
+
+            <section class="split__pane" id="chan-pane" aria-label="Saluran">
+              <div class="empty" id="chan-pane-empty">
+                <span class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-channel"/></svg></span>
+                <h2 class="empty__title">Pilih saluran</h2>
+                <p class="empty__text">Postingan saluran akan tampil di panel ini.</p>
+              </div>
+              <div class="conv" id="chan-main" hidden>
+                <header class="conv__head">
+                  <button class="icon-btn" id="chan-back" type="button" aria-label="Kembali" title="Kembali"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+                  <div class="conv__who conv__who--static"><span class="avatar-wrap" id="chan-head-avatar"></span><span class="conv__text"><span class="conv__title" id="chan-head-title"></span><span class="conv__status" id="chan-head-sub"></span></span></div>
+                  <button class="icon-btn" id="chan-share" type="button" aria-label="Bagikan saluran" title="Bagikan link"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+                  <button class="icon-btn" id="chan-edit" type="button" aria-label="Pengaturan saluran" title="Pengaturan saluran" hidden><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></button>
+                  <span class="conn" data-conn role="status" hidden></span>
+                </header>
+                <div class="conv__msgs feed" id="chan-scroll">
+                  <div class="chan-card" id="chan-card"></div>
+                  <div id="chan-pinned"></div>
+                  <div id="chan-posts-loading" aria-hidden="true"><div class="skeleton"></div><div class="skeleton"></div></div>
+                  <div id="chan-posts"></div>
+                  <div class="empty empty--inline" id="chan-posts-empty" hidden><h2 class="empty__title">Belum ada postingan</h2></div>
+                  <button class="btn btn--ghost list-more" id="chan-posts-more" type="button" hidden>Muat postingan lama</button>
+                </div>
+                <div class="bar" id="chan-bar" hidden>
+                  <div class="bar__body"><strong>Mengedit postingan</strong></div>
+                  <button class="icon-btn" id="chan-bar-close" type="button" aria-label="Batalkan" title="Batalkan"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+                </div>
+                <form class="composer" id="chan-composer" hidden novalidate>
+                  <button class="icon-btn composer__side" id="chan-attach" type="button" aria-label="Lampirkan file" title="Lampirkan"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+                  <label class="sr-only" for="chan-input">Tulis postingan</label>
+                  <textarea class="composer__input" id="chan-input" rows="1" maxlength="4000" placeholder="Tulis postingan…"></textarea>
+                  <button class="send-btn" id="chan-send" type="submit" aria-label="Kirim postingan" title="Kirim"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+                </form>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="panggil" aria-label="Panggil" hidden>
+          <div class="page">
+            <div class="page__bar">
+              <h2 class="page__title">Riwayat panggilan</h2>
+              <button class="btn btn--ghost btn--sm" id="calls-clear" type="button" hidden>Hapus semua</button>
+            </div>
+            <div id="calls-loading" aria-hidden="true" hidden><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+            <ul class="list" id="calls-list"></ul>
+            <div class="empty" id="calls-empty" hidden>
+              <span class="empty__icon"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></span>
+              <h2 class="empty__title">Belum ada riwayat panggilan</h2>
+              <p class="empty__text">Mulai panggilan suara atau video dari chat atau profil seseorang.</p>
+            </div>
+            <div class="empty" id="calls-error" hidden>
+              <h2 class="empty__title">Gagal memuat riwayat</h2>
+              <button class="btn btn--ghost" id="calls-retry" type="button">Coba lagi</button>
+            </div>
+            <button class="btn btn--ghost list-more" id="calls-more" type="button" hidden>Muat lebih banyak</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="nav" aria-label="Navigasi utama">
+      <div class="nav__brand brand"><span class="logo" aria-hidden="true">X</span><span>XenChat</span></div>
+      <ul class="nav__items">
+        <li><button class="nav__item" type="button" data-tab="chat" aria-current="page"><span class="nav__icon"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg></span><span class="nav__label">Chat</span><span class="nav__badge" id="nav-badge-chat" hidden aria-label="Pesan belum dibaca"></span></button></li>
+        <li><button class="nav__item" type="button" data-tab="story"><span class="nav__icon"><svg class="icon" aria-hidden="true"><use href="#i-story"/></svg></span><span class="nav__label">Story</span></button></li>
+        <li><button class="nav__item" type="button" data-tab="saluran"><span class="nav__icon"><svg class="icon" aria-hidden="true"><use href="#i-channel"/></svg></span><span class="nav__label">Saluran</span></button></li>
+        <li><button class="nav__item" type="button" data-tab="panggil"><span class="nav__icon"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="nav__label">Panggil</span></button></li>
+      </ul>
+<div class="nav__foot">
+        <button class="nav__me" id="side-profile" type="button" aria-label="Buka profil"></button>
+        <button class="nav__settings" id="settings-btn" type="button">
+          <span class="nav__icon"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></span>
+          <span>Pengaturan</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Menu ⋮ -->
+  <dialog class="dialog" id="menu-dialog" aria-label="Menu">
+    <div class="sheet">
+      <div class="sheet__head">
+        <h2 class="sheet__title">Menu</h2>
+        <form method="dialog"><button class="icon-btn" aria-label="Tutup" title="Tutup"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></form>
+      </div>
+      <div class="profile profile--link" id="profile" role="button" tabindex="0" aria-label="Buka profil"></div>
+      <nav class="menu-list" aria-label="Menu utama">
+        <button class="menu-item" type="button" data-go="/profile"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Profil</button>
+        <button class="menu-item" type="button" data-go="/settings"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg>Pengaturan</button>
+        <button class="menu-item" type="button" data-go="/settings/blocked"><svg class="icon" aria-hidden="true"><use href="#i-block"/></svg>Pengguna diblokir</button>
+        <button class="menu-item" type="button" data-go="/calls"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Riwayat panggilan</button>
+        <button class="menu-item" type="button" data-go="/settings/about"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Tentang XenChat</button>
+        <button class="menu-item" type="button" id="menu-owner" data-go="/owner" hidden><svg class="icon" aria-hidden="true"><use href="#i-crown"/></svg>Owner Panel</button>
+        <div class="menu-divider" role="separator"></div>
+        <button class="menu-item menu-item--danger" type="button" id="logout-btn"><svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg>Keluar</button>
+      </nav>
+    </div>
+  </dialog>
+
+  <!-- Edit profil -->
+  <dialog class="dialog" id="edit-dialog" aria-labelledby="edit-title">
+    <form class="sheet" id="edit-form" novalidate>
+      <div class="sheet__head">
+        <h2 class="sheet__title" id="edit-title">Edit profil</h2>
+        <button class="icon-btn" type="button" aria-label="Tutup" title="Tutup" id="edit-close"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="avatar-edit">
+        <span id="edit-avatar"></span>
+        <div class="avatar-edit__actions">
+          <button class="btn btn--ghost" id="edit-pick" type="button">Pilih foto</button>
+          <button class="link-btn" id="edit-remove-avatar" type="button">Hapus foto</button>
+        </div>
+        <input id="edit-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+      </div>
+      <p class="field__error" id="edit-err-avatar" role="alert"></p>
+      <div class="field">
+        <label class="field__label" for="edit-name">Nama</label>
+        <input class="field__input" id="edit-name" name="name" type="text" maxlength="50" autocomplete="name">
+        <p class="field__error" id="edit-err-name" role="alert"></p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="edit-username">Username</label>
+        <input class="field__input" id="edit-username" name="username" type="text" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username">
+        <p class="field__error" id="edit-err-username" role="alert"></p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="edit-bio">Bio</label>
+        <textarea class="field__input field__input--area" id="edit-bio" name="bio" rows="2" maxlength="160"></textarea>
+        <p class="field__error" id="edit-err-bio" role="alert"></p>
+      </div>
+      <p class="form-error" id="edit-error" role="alert"></p>
+      <button class="btn btn--block" id="edit-save" type="submit">Simpan</button>
+    </form>
+  </dialog>
+
+  <!-- Menu pesan -->
+  <dialog class="dialog" id="msg-menu" aria-label="Opsi pesan">
+    <div class="sheet">
+      <div class="reaction-row" id="menu-reactions"></div>
+      <div class="menu-actions">
+        <button class="btn btn--ghost" id="menu-reply" type="button">Balas</button>
+        <button class="btn btn--ghost" id="menu-edit" type="button">Edit</button>
+        <button class="btn btn--outline-danger" id="menu-delete" type="button">Hapus</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Buat / edit grup -->
+  <dialog class="dialog" id="group-dialog" aria-labelledby="group-dlg-title">
+    <form class="sheet" id="group-form" novalidate>
+      <div class="sheet__head">
+        <h2 class="sheet__title" id="group-dlg-title">Buat grup</h2>
+        <button class="icon-btn" type="button" id="group-close" aria-label="Tutup" title="Tutup"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="avatar-edit">
+        <span id="group-avatar"></span>
+        <div class="avatar-edit__actions">
+          <button class="btn btn--ghost" id="group-pick" type="button">Pilih foto</button>
+          <button class="link-btn" id="group-remove-avatar" type="button">Hapus foto</button>
+        </div>
+        <input id="group-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+      </div>
+      <p class="field__error" id="group-err-avatar" role="alert"></p>
+      <div class="field">
+        <label class="field__label" for="group-name">Nama grup</label>
+        <input class="field__input" id="group-name" maxlength="50" autocomplete="off">
+        <p class="field__error" id="group-err-name" role="alert"></p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="group-desc">Deskripsi</label>
+        <textarea class="field__input field__input--area" id="group-desc" rows="2" maxlength="200"></textarea>
+        <p class="field__error" id="group-err-description" role="alert"></p>
+      </div>
+      <p class="form-error" id="group-error" role="alert"></p>
+      <button class="btn btn--block" id="group-save" type="submit">Buat grup</button>
+    </form>
+  </dialog>
+
+  <!-- Info grup (layar penuh di HP) -->
+  <dialog class="dialog dialog--full" id="ginfo-dialog" aria-labelledby="ginfo-title">
+    <div class="sheet sheet--full">
+      <div class="sheet__head">
+        <button class="icon-btn" type="button" id="ginfo-close" aria-label="Kembali" title="Kembali"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+        <h2 class="sheet__title" id="ginfo-title">Info grup</h2>
+        <span class="sheet__spacer"></span>
+      </div>
+      <div class="ginfo__top" id="ginfo-top"></div>
+      <div class="ginfo__about"><h3 class="section-title">Tentang</h3><p id="ginfo-desc"></p></div>
+      <div class="ginfo__actions">
+        <button class="btn" id="ginfo-chat" type="button">Buka percakapan grup</button>
+        <button class="btn btn--ghost" id="ginfo-edit" type="button" hidden>Edit grup</button>
+        <button class="btn btn--ghost" id="ginfo-add" type="button" hidden>Tambah anggota</button>
+        <label class="field__label" for="ginfo-mute">Notifikasi grup</label>
+        <select class="field__input" id="ginfo-mute">
+          <option value="off">Aktif</option>
+          <option value="1h">Senyap 1 jam</option>
+          <option value="8h">Senyap 8 jam</option>
+          <option value="1w">Senyap 1 minggu</option>
+          <option value="always">Senyap selamanya</option>
+        </select>
+      </div>
+      <div class="ginfo__invite" id="ginfo-invite" hidden>
+        <h3 class="section-title">Link undangan</h3>
+        <p class="invite-link" id="inv-link"></p>
+        <div class="row row--gap">
+          <button class="btn btn--ghost btn--sm" id="inv-copy" type="button">Salin / bagikan</button>
+          <button class="btn btn--ghost btn--sm" id="inv-new" type="button">Buat link</button>
+          <button class="btn btn--outline-danger btn--sm" id="inv-revoke" type="button">Cabut</button>
+        </div>
+      </div>
+      <h3 class="section-title">Anggota</h3>
+      <ul class="list" id="ginfo-members"></ul>
+      <div id="ginfo-state" class="search-note"></div>
+      <button class="btn btn--ghost list-more" id="ginfo-more" type="button" hidden>Muat lebih banyak</button>
+      <div class="ginfo__danger">
+        <button class="btn btn--outline-danger btn--block" id="ginfo-leave" type="button">Keluar grup</button>
+        <button class="btn btn--outline-danger btn--block" id="ginfo-delete" type="button" hidden>Hapus grup</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Tambah anggota -->
+  <dialog class="dialog dialog--full" id="gadd-dialog" aria-labelledby="gadd-title">
+    <div class="sheet sheet--full">
+      <div class="sheet__head">
+        <button class="icon-btn" type="button" id="gadd-close" aria-label="Kembali" title="Kembali"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg></button>
+        <h2 class="sheet__title" id="gadd-title">Tambah anggota</h2>
+        <span class="sheet__spacer"></span>
+      </div>
+      <label class="sr-only" for="gadd-search">Cari pengguna</label>
+      <input class="field__input" id="gadd-search" type="search" placeholder="Cari nama, @username, atau ID" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30">
+      <div id="gadd-results"></div>
+    </div>
+  </dialog>
+
+  <!-- Aksi anggota -->
+  <dialog class="dialog" id="gmember-dialog" aria-labelledby="gm-title">
+    <div class="sheet">
+      <h2 class="sheet__title truncate" id="gm-title"></h2>
+      <div class="menu-actions">
+        <button class="btn btn--ghost" id="gm-profile" type="button">Lihat profil</button>
+        <button class="btn btn--ghost" id="gm-promote" type="button">Jadikan admin</button>
+        <button class="btn btn--ghost" id="gm-demote" type="button">Hapus dari admin</button>
+        <button class="btn btn--ghost" id="gm-owner" type="button">Jadikan pemilik</button>
+        <button class="btn btn--outline-danger" id="gm-remove" type="button">Keluarkan dari grup</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Buat story -->
+  <dialog class="dialog" id="story-dialog" aria-labelledby="story-dlg-title">
+    <form class="sheet" id="story-form" novalidate>
+      <div class="sheet__head">
+        <h2 class="sheet__title" id="story-dlg-title">Story baru</h2>
+        <button class="icon-btn" type="button" id="story-close" aria-label="Tutup" title="Tutup"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="story-preview" id="story-preview"></div>
+      <div class="field">
+        <label class="field__label" for="story-caption">Caption (opsional)</label>
+        <input class="field__input" id="story-caption" maxlength="200" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field__label" for="story-privacy">Siapa yang bisa melihat</label>
+        <select class="field__input" id="story-privacy">
+          <option value="contacts">Kontak (yang pernah chat denganmu)</option>
+          <option value="everyone">Semua orang</option>
+          <option value="nobody">Hanya saya</option>
+        </select>
+      </div>
+      <p class="form-error" id="story-form-error" role="alert"></p>
+      <button class="btn btn--block" id="story-post" type="submit">Bagikan</button>
+    </form>
+  </dialog>
+
+  <!-- Daftar penonton story -->
+  <dialog class="dialog" id="sv-viewers-dialog" aria-labelledby="svv-title">
+    <div class="sheet">
+      <div class="sheet__head">
+        <h2 class="sheet__title" id="svv-title">Dilihat oleh</h2>
+        <form method="dialog"><button class="icon-btn" aria-label="Tutup" title="Tutup"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></form>
+      </div>
+      <ul class="list" id="svv-list"></ul>
+      <div id="svv-state" class="search-note"></div>
+    </div>
+  </dialog>
+
+  <!-- Buat / edit saluran -->
+  <dialog class="dialog dialog--full" id="chan-dialog" aria-labelledby="chan-dlg-title">
+    <form class="sheet sheet--full" id="chan-form" novalidate>
+      <div class="sheet__head">
+        <h2 class="sheet__title" id="chan-dlg-title">Buat saluran</h2>
+        <button class="icon-btn" type="button" id="chan-close" aria-label="Tutup" title="Tutup"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="avatar-edit">
+        <span id="chan-avatar"></span>
+        <div class="avatar-edit__actions">
+          <button class="btn btn--ghost" id="chan-pick" type="button">Pilih foto</button>
+          <button class="link-btn" id="chan-remove-avatar" type="button">Hapus foto</button>
+        </div>
+        <input id="chan-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+      </div>
+      <p class="field__error" id="chan-err-avatar" role="alert"></p>
+      <div class="field">
+        <label class="field__label" for="chan-name">Nama saluran</label>
+        <input class="field__input" id="chan-name" maxlength="50" autocomplete="off">
+        <p class="field__error" id="chan-err-name" role="alert"></p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="chan-username">Username</label>
+        <input class="field__input" id="chan-username" maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off">
+        <p class="field__hint">Huruf kecil, angka, atau underscore (3-20 karakter).</p>
+        <p class="field__error" id="chan-err-username" role="alert"></p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="chan-desc">Deskripsi</label>
+        <textarea class="field__input field__input--area" id="chan-desc" rows="2" maxlength="200"></textarea>
+        <p class="field__error" id="chan-err-description" role="alert"></p>
+      </div>
+      <p class="form-error" id="chan-form-error" role="alert"></p>
+      <button class="btn btn--block" id="chan-save" type="submit">Buat saluran</button>
+
+      <div class="chan-admins" id="chan-admins" hidden>
+        <h3 class="section-title">Admin</h3>
+        <ul class="list" id="chan-admin-list"></ul>
+        <div class="row row--gap">
+          <label class="sr-only" for="chan-admin-input">Username admin baru</label>
+          <input class="field__input" id="chan-admin-input" placeholder="@username (harus pengikut)" maxlength="21" autocapitalize="none" spellcheck="false" autocomplete="off">
+          <button class="btn btn--ghost" id="chan-admin-add" type="button">Tambah</button>
+        </div>
+        <div class="row row--gap">
+          <label class="sr-only" for="chan-transfer-input">Pemilik baru</label>
+          <input class="field__input" id="chan-transfer-input" placeholder="Pindahkan ke @username" maxlength="21" autocapitalize="none" spellcheck="false" autocomplete="off">
+          <button class="btn btn--ghost" id="chan-transfer-btn" type="button">Pindahkan</button>
+        </div>
+        <button class="btn btn--outline-danger btn--block" id="chan-delete" type="button">Hapus saluran</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Menu postingan saluran -->
+  <dialog class="dialog" id="chan-post-menu" aria-label="Opsi postingan">
+    <div class="sheet">
+      <div class="menu-actions">
+        <button class="btn btn--ghost" id="cpm-pin" type="button">Sematkan</button>
+        <button class="btn btn--ghost" id="cpm-edit" type="button">Edit</button>
+        <button class="btn btn--outline-danger" id="cpm-delete" type="button">Hapus</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Penampil story -->
+  <div class="sv" id="story-viewer" role="dialog" aria-modal="true" aria-label="Story" hidden>
+    <div class="sv__bars" id="sv-bars"></div>
+    <header class="sv__head">
+      <span id="sv-avatar"></span>
+      <span class="sv__who"><span class="truncate" id="sv-name"></span><span class="sv__time" id="sv-time"></span></span>
+      <button class="icon-btn sv__btn" id="sv-delete" type="button" aria-label="Hapus story" title="Hapus story" hidden><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button>
+      <button class="icon-btn sv__btn" id="sv-close" type="button" aria-label="Tutup" title="Tutup"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="sv__stage">
+      <div class="sv__media" id="sv-media"></div>
+      <button class="sv__nav sv__nav--prev" id="sv-prev" type="button" aria-label="Story sebelumnya"></button>
+      <button class="sv__nav sv__nav--next" id="sv-next" type="button" aria-label="Story berikutnya"></button>
+    </div>
+    <p class="sv__caption" id="sv-caption"></p>
+    <div class="sv__foot">
+      <button class="sv__views" id="sv-views" type="button" hidden></button>
+      <div class="sv__react" id="sv-react" role="group" aria-label="Reaksi" hidden></div>
+      <form class="sv__reply" id="sv-reply" hidden>
+        <label class="sr-only" for="sv-input">Balas story</label>
+        <input class="field__input" id="sv-input" placeholder="Balas story…" maxlength="1000" autocomplete="off">
+        <button class="send-btn" type="submit" aria-label="Kirim balasan" title="Kirim"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Menu chat ⋮ -->
+  <dialog class="dialog" id="chat-menu" aria-label="Menu chat">
+    <div class="sheet"><div class="menu-actions">
+      <button class="btn btn--ghost" id="cm-profile" type="button">Lihat profil</button>
+      <button class="btn btn--ghost" id="cm-block" type="button">Blokir</button>
+      <button class="btn btn--outline-danger" id="cm-report" type="button">Laporkan</button>
+    </div></div>
+  </dialog>
+
+  <!-- Lampiran -->
+  <dialog class="dialog" id="attach-dialog" aria-label="Lampirkan">
+    <div class="sheet">
+      <h2 class="sheet__title">Lampirkan</h2>
+      <div class="attach-grid">
+        <button class="attach-btn" type="button" data-kind="image"><span aria-hidden="true">🖼️</span>Foto</button>
+        <button class="attach-btn" type="button" data-kind="video"><span aria-hidden="true">🎬</span>Video</button>
+        <button class="attach-btn" type="button" data-kind="audio"><span aria-hidden="true">🎵</span>Audio</button>
+        <button class="attach-btn" type="button" data-kind="file"><span aria-hidden="true">📄</span>Dokumen</button>
+      </div>
+      <input type="file" id="attach-file" hidden>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="attach-preview" aria-labelledby="ap-title">
+    <form class="sheet" id="ap-form" novalidate>
+      <h2 class="sheet__title" id="ap-title">Kirim lampiran</h2>
+      <div class="ap__preview" id="ap-preview"></div>
+      <p class="ap__name truncate" id="ap-name"></p>
+      <p class="ap__size" id="ap-size"></p>
+      <label class="sr-only" for="ap-caption">Keterangan</label>
+      <input class="field__input" id="ap-caption" maxlength="1000" placeholder="Tambahkan keterangan (opsional)" autocomplete="off">
+      <div class="progress" id="ap-progress" hidden role="progressbar" aria-label="Kemajuan unggahan"><span id="ap-progress-fill"></span></div>
+      <p class="form-error" id="ap-error" role="alert"></p>
+      <div class="sheet__actions">
+        <button class="btn btn--ghost" id="ap-cancel" type="button">Batal</button>
+        <button class="btn" id="ap-send" type="submit">Kirim</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Laporkan pengguna -->
+  <dialog class="dialog" id="report-dialog" aria-labelledby="report-title">
+    <form class="sheet" id="report-form" novalidate>
+      <h2 class="sheet__title" id="report-title">Laporkan <span id="report-user"></span></h2>
+      <div class="radio-list" role="radiogroup" aria-label="Kategori laporan">
+        <label class="radio"><input type="radio" name="category" value="spam" checked> Spam</label>
+        <label class="radio"><input type="radio" name="category" value="harassment"> Pelecehan</label>
+        <label class="radio"><input type="radio" name="category" value="fake_account"> Akun palsu</label>
+        <label class="radio"><input type="radio" name="category" value="inappropriate"> Konten tidak pantas</label>
+        <label class="radio"><input type="radio" name="category" value="other"> Lainnya</label>
+      </div>
+      <label class="sr-only" for="report-details">Detail</label>
+      <textarea class="field__input field__input--area" id="report-details" rows="3" maxlength="500" placeholder="Detail tambahan (opsional)"></textarea>
+      <p class="form-error" id="report-error" role="alert"></p>
+      <div class="sheet__actions">
+        <button class="btn btn--ghost" id="report-cancel" type="button">Batal</button>
+        <button class="btn" id="report-send" type="submit">Kirim laporan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Akun: email, password, hapus akun -->
+  <dialog class="dialog" id="email-dialog" aria-labelledby="email-title">
+    <form class="sheet" id="email-form" novalidate>
+      <h2 class="sheet__title" id="email-title">Email</h2>
+      <div class="field"><label class="field__label" for="email-input">Email baru</label><input class="field__input" id="email-input" type="email" autocomplete="email" maxlength="254"></div>
+      <div class="field"><label class="field__label" for="email-password">Password saat ini</label><input class="field__input" id="email-password" type="password" autocomplete="current-password" maxlength="72"></div>
+      <p class="form-error" id="email-error" role="alert"></p>
+      <div class="sheet__actions"><button class="btn btn--ghost" type="button" data-close-dialog>Batal</button><button class="btn" type="submit">Simpan</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="password-dialog" aria-labelledby="pw-title">
+    <form class="sheet" id="password-form" novalidate>
+      <h2 class="sheet__title" id="pw-title">Ubah password</h2>
+      <div class="field"><label class="field__label" for="pw-current">Password saat ini</label><input class="field__input" id="pw-current" type="password" autocomplete="current-password" maxlength="72"></div>
+      <div class="field"><label class="field__label" for="pw-new">Password baru</label><input class="field__input" id="pw-new" type="password" autocomplete="new-password" maxlength="72"></div>
+      <div class="field"><label class="field__label" for="pw-confirm">Konfirmasi password baru</label><input class="field__input" id="pw-confirm" type="password" autocomplete="new-password" maxlength="72"></div>
+      <p class="form-error" id="pw-error" role="alert"></p>
+      <div class="sheet__actions"><button class="btn btn--ghost" type="button" data-close-dialog>Batal</button><button class="btn" type="submit">Ubah</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="delete-dialog" aria-labelledby="del-title">
+    <form class="sheet" id="delete-form" novalidate>
+      <h2 class="sheet__title" id="del-title">Hapus akun</h2>
+      <p class="sheet__text">Nama, username, email, bio, dan fotomu dihapus. Pesan lama tetap ada sebagai "Akun dihapus". Masukkan password untuk melanjutkan.</p>
+      <div class="field"><label class="field__label" for="delete-password">Password</label><input class="field__input" id="delete-password" type="password" autocomplete="current-password" maxlength="72"></div>
+      <p class="form-error" id="delete-error" role="alert"></p>
+      <div class="sheet__actions"><button class="btn btn--ghost" type="button" data-close-dialog>Batal</button><button class="btn btn--danger" type="submit">Hapus akun</button></div>
+    </form>
+  </dialog>
+
+  <!-- Panggilan -->
+  <div class="call" id="call" role="dialog" aria-modal="true" aria-label="Panggilan" hidden>
+    <video class="call__remote" id="call-remote" playsinline autoplay></video>
+    <video class="call__local" id="call-local" playsinline autoplay muted></video>
+    <div class="call__top">
+      <div id="call-avatar"></div>
+      <h2 class="call__name truncate" id="call-name"></h2>
+      <p class="call__status" id="call-status" aria-live="polite"></p>
+    </div>
+    <div class="call__controls">
+      <button class="call-btn" id="call-mute" data-label="Bisukan" type="button" aria-pressed="false" aria-label="Matikan mikrofon" title="Mikrofon"><svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg></button>
+      <button class="call-btn" id="call-camera" data-label="Kamera" type="button" aria-pressed="false" aria-label="Matikan kamera" title="Kamera" hidden><svg class="icon" aria-hidden="true"><use href="#i-video"/></svg></button>
+      <button class="call-btn" id="call-switch" data-label="Balik" type="button" aria-label="Ganti kamera" title="Ganti kamera" hidden>⟲</button>
+      <button class="call-btn" id="call-speaker" data-label="Speaker" type="button" aria-label="Ganti output audio" title="Speaker" hidden>🔊</button>
+      <button class="call-btn call-btn--end" id="call-end" data-label="Akhiri" type="button" aria-label="Akhiri panggilan" title="Akhiri"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></button>
+    </div>
+  </div>
+
+  <div class="incoming" id="incoming" role="alertdialog" aria-labelledby="in-name" hidden>
+    <div class="incoming__card">
+      <div id="in-avatar"></div>
+      <h2 class="incoming__name truncate" id="in-name"></h2>
+      <p class="incoming__text" id="in-text"></p>
+      <div class="incoming__actions">
+        <button class="call-btn call-btn--end" id="in-reject" data-label="Tolak" type="button" aria-label="Tolak" title="Tolak"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></button>
+        <button class="call-btn call-btn--ok" id="in-accept" data-label="Terima" type="button" aria-label="Terima" title="Terima"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialog konfirmasi -->
+  <dialog class="dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+    <form method="dialog" class="sheet">
+      <h2 class="sheet__title" id="confirm-title"></h2>
+      <p class="sheet__text" id="confirm-text"></p>
+      <div class="sheet__actions">
+        <button class="btn btn--ghost" value="cancel" id="confirm-cancel">Batal</button>
+        <button class="btn btn--danger" value="ok" id="confirm-ok">Ya</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/socket.js"></script>
+  <script src="/js/media.js"></script>
+  <script src="/js/pages.js"></script>
+  <script src="/js/profile.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/chat.js"></script>
+  <script src="/js/groups.js"></script>
+  <script src="/js/stories.js"></script>
+  <script src="/js/channels.js"></script>
+  <script src="/js/calls.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/owner.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

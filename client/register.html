@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Daftar - XenChat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/ui.css">
+  <script src="/js/theme.js"></script>
+</head>
+<body>
+  <main class="auth">
+    <div class="auth__card">
+      <header class="auth__head">
+        <div class="brand"><span class="logo" aria-hidden="true">X</span><span>XenChat</span></div>
+        <h1 class="auth__title">Buat akun XenChat</h1>
+        <p class="auth__sub">Kamu akan mendapat Account ID 8 digit secara otomatis.</p>
+      </header>
+
+      <form id="auth-form" class="auth__form" data-mode="register" novalidate>
+        <div class="field">
+          <label class="field__label" for="name">Nama lengkap</label>
+          <input class="field__input" id="name" name="name" type="text" autocomplete="name" maxlength="50" required>
+          <p class="field__error" id="err-name" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="username">Username</label>
+          <input class="field__input" id="username" name="username" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="20" required>
+          <p class="field__hint">Huruf kecil, angka, atau underscore (3-20 karakter).</p>
+          <p class="field__error" id="err-username" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="email">Email</label>
+          <input class="field__input" id="email" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" required>
+          <p class="field__error" id="err-email" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="password">Password</label>
+          <input class="field__input" id="password" name="password" type="password" autocomplete="new-password" maxlength="72" required>
+          <p class="field__hint">Minimal 8 karakter.</p>
+          <p class="field__error" id="err-password" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="confirmPassword">Konfirmasi password</label>
+          <input class="field__input" id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" maxlength="72" required>
+          <p class="field__error" id="err-confirmPassword" role="alert"></p>
+        </div>
+        <p class="form-error" id="form-error" role="alert"></p>
+        <button class="btn btn--block" type="submit">Buat akun</button>
+      </form>
+
+      <p class="auth__foot">Sudah punya akun? <a href="login.html">Masuk</a></p>
+    </div>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
